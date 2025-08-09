@@ -1,19 +1,16 @@
-import { useEffect } from 'react'
-import { supabase } from './supabaseClient'
+import React from 'react';
+import HomePage from './HomePage';
 
+/**
+ * Main App Component
+ * Renders the HomePage directly, as modal logic is now handled within HomePage.
+ */
 function App() {
-  useEffect(() => {
-    async function fetchSongs() {
-      const {data, error} = await supabase.from('songs').select('*').order('created_at', {ascending: false})
-      if (error) {
-        console.error('Error fetching songs:', error)
-      } else {
-        console.log('Songs fetched:', data)
-      }
-    }
-    fetchSongs()
-  }, [])
-  return <div>Hello World</div>
+  return (
+    <div className="App">
+      <HomePage />
+    </div>
+  );
 }
 
-export default App
+export default App;
