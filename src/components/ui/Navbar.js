@@ -1,7 +1,7 @@
 import React from 'react';
-import { useTheme } from '../hooks/useTheme';
+import { useTheme } from '../../hooks/useTheme';
 import ThemeSwitcher from './ThemeSwitcher';
-import Search from '../Search';
+import Search from '../layout/Search';
 
 function Navbar({ 
   searchTerm, 

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import TagChip from "./TagChip";
-import MediaPlayer from "./MediaPlayer";
-import { useQueueActions } from "./hooks/useQueue";
-import { useTheme } from "./hooks/useTheme";
+import TagChip from "../../components/ui/TagChip";
+import MediaPlayer from "../../players/MediaPlayer";
+import { useQueueActions } from "../../hooks/useQueue";
+import { useTheme } from "../../hooks/useTheme";
 
 function DisplaySongs({ songs, onPlayNow, onAddToQueue }) {
   const [modalVideoUrl, setModalVideoUrl] = useState(null);
@@ -313,7 +313,9 @@ function DisplaySongs({ songs, onPlayNow, onAddToQueue }) {
       ))}
 
               {/* Media Player */}
-        <MediaPlayer videoUrl={modalVideoUrl} onClose={closeModal} />
+        {modalVideoUrl && (
+          <MediaPlayer videoUrl={modalVideoUrl} onClose={closeModal} />
+        )}
     </div>
   );
 }

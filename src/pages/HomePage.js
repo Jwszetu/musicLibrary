@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { supabase } from './supabaseClient';
-import SubmitSongModal from './SubmitSongModal';
-import DisplaySongs from './DisplaySongs';
-import Navbar from './components/Navbar';
-import FilterSortBar from './components/FilterSortBar';
-import { useTheme } from './hooks/useTheme';
+import { supabase } from '../lib/supabaseClient';
+import SubmitSongModal from '../components/forms/SubmitSongModal';
+import DisplaySongs from '../features/songs/DisplaySongs';
+import Navbar from '../components/ui/Navbar';
+import FilterSortBar from '../components/layout/FilterSortBar';
+import { useTheme } from '../hooks/useTheme';
 
 /**
  * HomePage Component

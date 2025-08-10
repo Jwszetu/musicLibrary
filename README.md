@@ -15,27 +15,29 @@ A modern React application for discovering, organizing, and playing music with a
 - **Rich Metadata**: View song details including artists, tags, descriptions, and submission dates
 - **Multi-Platform Links**: Direct links to YouTube, Spotify, and other streaming platforms
 
-### 🎧 Integrated Player & Queue
-- **Collapsible Sidebar Player**: Minimizable right-sidebar music player
+### 🎧 Integrated Media Player & Queue
+- **Collapsible Sidebar Player**: Minimizable right-sidebar media player with queue management
 - **Multi-Platform Playback**: 
   - YouTube videos with full player controls
   - Spotify track previews with autoplay
 - **Smart Queue Management**:
   - Add songs to queue or play immediately
-  - Drag-and-drop queue reordering
+  - Visual queue with track metadata
   - Auto-advance to next song (YouTube)
   - Previous/Next navigation with proper state management
+  - Remove tracks from queue with one-click
 - **Queue Persistence**: Observable pattern maintains queue state across components
-- **Playback Controls**: Play, pause, skip, and queue management
+- **Playback Controls**: Play, pause, skip, and comprehensive queue management
 
 ### 🎨 Modern UI & Theming
-- **Dynamic Theme System**: 
-  - Light, Dark, and Ocean themes
-  - Consistent color palette across all components
-  - Smooth theme transitions
+- **Enhanced Theme System**: 
+  - Light (gentle purple-tinted), Dark, and Ocean themes
+  - Eye-friendly color palettes with reduced eye strain
+  - Consistent color hierarchy across all components
+  - Smooth theme transitions and animations
 - **Responsive Design**: Optimized for desktop, tablet, and mobile
 - **Component Architecture**: Modular, reusable components with consistent styling
-- **Accessibility**: Proper disabled states and keyboard navigation
+- **Accessibility**: Proper disabled states, keyboard navigation, and color contrast
 
 ### 📝 Content Management
 - **Song Submission**: Easy-to-use form for adding new songs
@@ -49,6 +51,9 @@ A modern React application for discovering, organizing, and playing music with a
 - **Tailwind CSS** for utility-first responsive styling
 - **Custom Theme System** with CSS variables and observable pattern
 - **Component-based Architecture** with clear separation of concerns
+- **Organized File Structure**: Logical grouping by functionality (components, pages, players, features)
+- **Modular Design**: Each component has a single responsibility
+- **Clean Import Paths**: Consistent relative imports with clear hierarchy
 
 ### Backend & Database
 - **Supabase** for backend-as-a-service
@@ -68,29 +73,41 @@ A modern React application for discovering, organizing, and playing music with a
 ```
 src/
 ├── components/           # Reusable UI components
-│   ├── AdvancedSearch.js    # Search with filters and suggestions
-│   └── ThemeSwitcher.js     # Theme selection dropdown
+│   ├── forms/           # Form-related components
+│   │   └── SubmitSongModal.js  # Song submission modal
+│   ├── layout/          # Layout & navigation components
+│   │   ├── AdvancedSearch.js   # Advanced search with filters
+│   │   ├── FilterSortBar.js    # Filtering and sorting controls
+│   │   └── Search.js           # Simple search input
+│   └── ui/              # Basic UI components
+│       ├── Navbar.js           # Main navigation bar
+│       ├── TagChip.js          # Tag display component
+│       └── ThemeSwitcher.js    # Theme selection dropdown
+├── features/            # Feature-specific components
+│   └── songs/
+│       └── DisplaySongs.js     # Song grid with cards and actions
+├── pages/               # Page components
+│   ├── AdminPage.js            # Admin interface
+│   └── HomePage.js             # Main application page
+├── players/             # Media player components
+│   ├── MediaPlayer.js          # Main collapsible player with queue
+│   ├── SongQueue.js            # Standalone queue component
+│   ├── SpotifyPlayer.js        # Spotify embed integration
+│   └── YoutubePlayer.js        # YouTube iframe integration
 ├── hooks/               # Custom React hooks
-│   ├── useQueue.js         # Queue state and actions
-│   ├── useSearch.js        # Search functionality (advanced)
-│   └── useTheme.js         # Theme state and actions
+│   ├── useQueue.js             # Queue state and actions
+│   ├── useSearch.js            # Search functionality
+│   └── useTheme.js             # Theme state and actions
 ├── services/            # Global state managers
-│   ├── QueueManager.js     # Observable queue management
-│   ├── SearchManager.js    # Advanced search service (unused)
-│   └── ThemeManager.js     # Observable theme management
-├── themes/              # Theme system
-│   ├── themes.js           # Theme definitions and colors
-│   ├── global.css          # Theme-aware CSS utilities
-│   └── README.md           # Theme system documentation
-├── HomePage.js          # Main application component
-├── DisplaySongs.js      # Song grid with cards and actions
-├── Search.js           # Simple search input component
-├── VideoModal.js       # Collapsible player sidebar
-├── SubmitSongPage.js   # Song submission modal
-├── YoutubePlayer.js    # YouTube iframe integration
-├── SpotifyPlayer.js    # Spotify embed integration
-├── TagChip.js          # Tag display component
-└── supabaseClient.js   # Database configuration
+│   ├── QueueManager.js         # Observable queue management
+│   ├── SearchManager.js        # Advanced search service
+│   └── ThemeManager.js         # Observable theme management
+├── lib/                 # Utilities and configuration
+│   └── supabaseClient.js       # Database configuration
+└── themes/              # Theme system
+    ├── themes.js               # Theme definitions and colors
+    ├── global.css              # Theme-aware CSS utilities
+    └── README.md               # Theme system documentation
 ```
 
 ## 🚀 Getting Started
@@ -167,9 +184,10 @@ The build will be optimized and ready for deployment to services like Vercel, Ne
 - **Lazy Loading**: Components load on demand
 
 ### Code Quality
-- **ESLint**: Consistent code formatting and best practices
-- **Component Modularity**: Reusable, testable components
-- **Type Safety**: PropTypes for component interfaces
+- **Organized Architecture**: Clean file structure with logical component grouping
+- **Component Modularity**: Reusable, testable components with single responsibilities
+- **Consistent Naming**: Descriptive file and component names reflecting their purpose
+- **Clean Imports**: Well-organized import paths following the new structure
 - **Error Handling**: Graceful error states and user feedback
 
 ### Browser Compatibility
@@ -205,7 +223,3 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 - **Tailwind CSS** for the utility-first CSS framework
 - **React** team for the amazing frontend library
 - **YouTube** and **Spotify** for their embeddable players
-
----
-
-Built with ❤️ for music lovers everywhere 🎵

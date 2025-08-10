@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from './supabaseClient'; // Import supabase client
-import { useTheme } from './hooks/useTheme';
+import { supabase } from '../../lib/supabaseClient'; // Import supabase client
+import { useTheme } from '../../hooks/useTheme';
 
 /**
  * SubmitSongModal Component

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from './hooks/useTheme';
+import { useTheme } from '../../hooks/useTheme';
 
 function Search({ searchTerm, setSearchTerm, loading = false }) {
   const { getColor } = useTheme();

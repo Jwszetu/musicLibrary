@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from './hooks/useTheme';
+import { useTheme } from '../../hooks/useTheme';
 
 function TagChip({ tags = [], color = 'bg-gray-200', textColor = 'text-gray-800' }) {
   // tags: array of objects {id: string, name: string}

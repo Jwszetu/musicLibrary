@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useTheme } from '../hooks/useTheme';
+import { useTheme } from '../../hooks/useTheme';
 
 function FilterSortBar({ songs, onFilteredSongsChange, totalCount = 0 }) {
   const { getColor } = useTheme();

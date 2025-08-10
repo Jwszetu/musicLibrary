@@ -1,8 +1,8 @@
 import React, { useState, useRef, useMemo, useCallback } from 'react';
 import YoutubePlayer from './YoutubePlayer';
 import SpotifyPlayer from './SpotifyPlayer';
-import { useQueue } from './hooks/useQueue';
-import { useTheme } from './hooks/useTheme';
+import { useQueue } from '../hooks/useQueue';
+import { useTheme } from '../hooks/useTheme';
 
 
 function MediaPlayer({ videoUrl, onClose }) {
