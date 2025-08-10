@@ -208,7 +208,7 @@ function FilterSortBar({ songs, onFilteredSongsChange, totalCount = 0 }) {
         backgroundColor: `${getColor('background.secondary')}f0`,
         borderColor: getColor('border.primary'),
         maxWidth: '100vw',
-        overflow: 'hidden',
+        // overflow: 'hidden',
       }}
     >
       <div className="flex flex-wrap items-center justify-between gap-4 p-6">
@@ -250,15 +250,16 @@ function FilterSortBar({ songs, onFilteredSongsChange, totalCount = 0 }) {
           {showFilters && (
             <div 
               data-dropdown
-              className="absolute top-full left-0 mt-3 w-96 border-2 rounded-2xl shadow-2xl z-20 max-h-96 overflow-hidden animate-in slide-in-from-top-2 duration-200"
+              className="absolute top-full left-0 mt-3 w-96 border-2 rounded-2xl shadow-2xl max-h-96 overflow-hidden animate-in slide-in-from-top-2 duration-200"
               style={{
                 backgroundColor: getColor('background.card'),
                 borderColor: getColor('border.primary'),
-                boxShadow: `0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)`,
+                boxShadow: `0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2)`,
                 maxWidth: 'calc(100vw - 2rem)',
                 left: '0',
                 right: 'auto',
                 transform: 'translateX(0)',
+                zIndex: 9999,
               }}
             >
               <div className="max-h-96 overflow-y-auto">
@@ -612,7 +613,7 @@ function FilterSortBar({ songs, onFilteredSongsChange, totalCount = 0 }) {
           {/* Sort Dropdown */}
           {showSorts && (
             <div 
-              className="absolute top-full right-0 mt-3 w-56 border-2 rounded-2xl shadow-2xl z-20 animate-in slide-in-from-top-2 duration-200"
+              className="absolute top-full right-0 mt-3 w-56 border-2 rounded-2xl shadow-2xl z-[60] animate-in slide-in-from-top-2 duration-200"
               style={{
                 backgroundColor: getColor('background.card'),
                 borderColor: getColor('border.primary'),
