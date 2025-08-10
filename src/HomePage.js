@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from './supabaseClient';
-import SubmitSongPage from './SubmitSongPage';
+import SubmitSongModal from './SubmitSongModal';
 import DisplaySongs from './DisplaySongs';
-import ThemeSwitcher from './components/ThemeSwitcher';
-import Search from './Search';
+import Navbar from './components/Navbar';
+import FilterSortBar from './components/FilterSortBar';
 import { useTheme } from './hooks/useTheme';
 
 /**
@@ -22,6 +22,7 @@ function HomePage() {
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchLoading, setSearchLoading] = useState(false);
+  const [filteredSongs, setFilteredSongs] = useState([]);
   
   // Get theme functions
   const { getColor } = useTheme();
@@ -92,6 +93,14 @@ function HomePage() {
     setSearchTerm(newTerm);
   };
 
+  // Filter/sort handler
+  const handleFilteredSongsChange = useCallback((filtered) => {
+    setFilteredSongs(filtered);
+  }, []);
+
+  // Determine which songs to display (filtered if available, otherwise search results)
+  const displaySongs = filteredSongs.length > 0 || searchTerm ? filteredSongs : songs;
+
   // Render logic based on loading, error, or data availability
   if (loading) {
     return (
@@ -131,76 +140,62 @@ function HomePage() {
       style={{ backgroundColor: getColor('background.primary') }}
     >
       {/* Navigation Bar */}
-      <nav 
-        className="p-4 sticky top-0 z-10 border-b theme-transition"
-        style={{ 
-          backgroundColor: getColor('background.card'),
-          borderColor: getColor('border.primary'),
-          boxShadow: getColor('background.primary') === '#ffffff' ? '0 4px 6px -1px rgb(0 0 0 / 0.1)' : '0 4px 6px -1px rgb(0 0 0 / 0.3)'
-        }}
-      >
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 
-            className="text-2xl font-bold theme-transition"
-            style={{ color: getColor('text.accent') }}
-          >
-            Song Hub 🎶
-          </h1>
-         
-          <div className="flex items-center gap-4">
-            <ThemeSwitcher />
-            <button
-              onClick={() => setShowSubmitModal(true)}
-              className="px-4 py-2 font-medium rounded-lg transition duration-300 ease-in-out"
-              style={{
-                backgroundColor: getColor('primary.500'),
-                color: getColor('text.inverse'),
-                boxShadow: getColor('background.primary') === '#ffffff' ? '0 4px 6px -1px rgb(0 0 0 / 0.1)' : '0 4px 6px -1px rgb(0 0 0 / 0.3)'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = getColor('primary.600');
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = getColor('primary.500');
-              }}
-            >
-              Submit New Song
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Navbar
+        searchTerm={searchTerm}
+        onSearchTermChange={handleSearchTermChange}
+        searchLoading={searchLoading}
+        onSubmitSongClick={() => setShowSubmitModal(true)}
+      />
 
       {/* 
         Add extra bottom padding to ensure the last row of songs is visible above the player/modal.
         You can adjust the pb-32 value if your player is taller/shorter.
       */}
-      <div className="container mx-auto p-4 sm:p-6 lg:p-8 pb-32">
-        <Search
-          searchTerm={searchTerm}
-          setSearchTerm={handleSearchTermChange}
-          loading={searchLoading}
-        />
-        <p 
-          className="text-lg mb-12 text-center max-w-2xl mx-auto"
-          style={{ color: getColor('text.subtitle') }}
-        >
-          Explore a collection of amazing songs, their artists, and where to find them.
-        </p>
-        {songs.length === 0 ? (
-          <div 
-            className="text-center text-xl py-10"
-            style={{ color: getColor('text.secondary') }}
+      <div className="container mx-auto pb-32">
+        {/* Top section with subtitle */}
+        <div className="p-4 sm:p-6 lg:p-8 pb-0">
+          <p 
+            className="text-lg mb-6 text-center max-w-2xl mx-auto"
+            style={{ color: getColor('text.subtitle') }}
           >
-            No songs found{searchTerm ? ` for "${searchTerm}"` : ''}. Be the first to add one!
-          </div>
-        ) : (
-          <DisplaySongs songs={songs} />
+            Explore a collection of amazing songs, their artists, and where to find them.
+          </p>
+        </div>
+
+        {/* Filter and Sort Bar */}
+        {songs.length > 0 && (
+          <FilterSortBar
+            songs={songs}
+            onFilteredSongsChange={handleFilteredSongsChange}
+            totalCount={songs.length}
+          />
         )}
+
+        {/* Results section */}
+        <div className="p-4 sm:p-6 lg:p-8 pt-6">
+          {songs.length === 0 ? (
+            <div 
+              className="text-center text-xl py-10"
+              style={{ color: getColor('text.secondary') }}
+            >
+              No songs found{searchTerm ? ` for "${searchTerm}"` : ''}. Be the first to add one!
+            </div>
+          ) : displaySongs.length === 0 ? (
+            <div 
+              className="text-center text-xl py-10"
+              style={{ color: getColor('text.secondary') }}
+            >
+              No songs match your current filters. Try adjusting your selection.
+            </div>
+          ) : (
+            <DisplaySongs songs={displaySongs} />
+          )}
+        </div>
       </div>
 
       {/* Submit Song Modal */}
       {showSubmitModal && (
-        <SubmitSongPage onClose={handleCloseSubmitModal} />
+        <SubmitSongModal onClose={handleCloseSubmitModal} />
       )}
 
       {/* Footer spacer to avoid content hidden under pinned player */}

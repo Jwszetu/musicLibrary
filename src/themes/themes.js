@@ -3,7 +3,7 @@ export const themes = {
   light: {
     name: 'Light',
     colors: {
-      // Primary colors
+      // Primary colors (blue)
       primary: {
         50: '#eff6ff',
         100: '#dbeafe',
@@ -16,61 +16,92 @@ export const themes = {
         800: '#1e40af',
         900: '#1e3a8a',
       },
-      // Background colors
+      // Secondary colors (purple)
+      secondary: {
+        50: '#faf5ff',
+        100: '#f3e8ff',
+        200: '#e9d5ff',
+        300: '#d8b4fe',
+        400: '#c084fc',
+        500: '#a855f7', // Main secondary
+        600: '#9333ea',
+        700: '#7c3aed',
+        800: '#6b21a8',
+        900: '#581c87',
+      },
+      // Background colors (low saturation, balanced layers)
       background: {
-        primary: '#ffffff',
-        secondary: '#f8fafc',
-        tertiary: '#f1f5f9',
-        card: '#ffffff',
-        modal: '#ffffff',
-        disabled: '#f1f5f9',
+        primary: '#f1eff1',         // Very subtle warm gray base (main background)
+        secondary: '#eae8ea',       // Gentle warm gray (sections)
+        tertiary: '#e0dee0',        // Soft medium gray (contrast areas)
+        card: '#f7f6f7',            // Barely tinted warm white (cards)
+        modal: '#f7f6f7',           // Barely tinted warm white (modals)
+        disabled: '#e0dee0',        // Soft medium gray
       },
-      // Text colors
+      // Text colors (consistent, softer, warmer)
       text: {
-        primary: '#1f2937',        // Main text
-        secondary: '#6b7280',      // Secondary text
-        tertiary: '#9ca3af',       // Muted text
-        accent: '#3b82f6',         // Accent/link text
-        inverse: '#ffffff',        // Text on dark backgrounds
-        muted: '#9ca3af',          // Very light text
-        placeholder: '#d1d5db',    // Placeholder text
-        disabled: '#d1d5db',       // Disabled text
-        error: '#dc2626',          // Error text
-        success: '#16a34a',        // Success text
-        warning: '#d97706',        // Warning text
-        info: '#3b82f6',           // Info text
-        // UI-specific text colors
-        navbar: '#1f2937',         // Navigation text
-        title: '#1f2937',          // Page/section titles
-        subtitle: '#6b7280',       // Subtitles
-        caption: '#9ca3af',        // Small captions
-        meta: '#9ca3af',           // Metadata text
-        button: '#ffffff',         // Button text
-        link: '#3b82f6',           // Link text
-        linkHover: '#2563eb',      // Link hover text
+        primary: '#4a5568',         // Main text (consistent everywhere)
+        secondary: '#718096',       // Secondary text (consistent everywhere)
+        tertiary: '#a0aec0',        // Light warm gray
+        accent: '#805ad5',          // Purple accent (consistent)
+        inverse: '#ffffff',         // Text on dark backgrounds
+        muted: '#a0aec0',           // Muted text (same as tertiary)
+        placeholder: '#a0aec0',     // Placeholder (same as tertiary/muted)
+        disabled: '#a0aec0',        // Disabled (same as tertiary/muted)
+        error: '#e53e3e',           // Softer red
+        success: '#38a169',         // Softer green
+        warning: '#dd6b20',         // Softer orange
+        info: '#4299e1',            // Softer blue info
+        // UI-specific text colors (synced with main colors)
+        navbar: '#4a5568',          // Same as primary
+        title: '#4a5568',           // Same as primary
+        subtitle: '#718096',        // Same as secondary
+        caption: '#a0aec0',         // Same as tertiary/muted
+        meta: '#a0aec0',            // Same as tertiary/muted
+        button: '#ffffff',          // Button text
+        link: '#805ad5',            // Same as accent
+        linkHover: '#6b46c1',       // Softer purple hover
       },
-      // Border colors
+      // Border colors (very subtle, balanced)
       border: {
-        primary: '#e5e7eb',
-        secondary: '#d1d5db',
-        accent: '#3b82f6',
-        disabled: '#d1d5db',
+        primary: '#d5d3d5',         // Very subtle gray border
+        secondary: '#cac8ca',       // Gentle medium gray border
+        accent: '#805ad5',          // Softer purple accent border
+        disabled: '#cac8ca',        // Gentle disabled border
       },
       // Status colors
       success: {
-        bg: '#dcfce7',
-        text: '#166534',
-        border: '#bbf7d0',
+        50: '#f0fff4',
+        100: '#c6f6d5',
+        200: '#9ae6b4',
+        500: '#38a169',
+        600: '#2f855a',
+        700: '#276749',
+        bg: '#f0fff4',
+        text: '#276749',
+        border: '#9ae6b4',
       },
       error: {
-        bg: '#fef2f2',
-        text: '#dc2626',
-        border: '#fecaca',
+        50: '#fed7d7',
+        100: '#fed7d7',
+        200: '#fbb6ce',
+        500: '#e53e3e',
+        600: '#c53030',
+        700: '#9b2c2c',
+        bg: '#fed7d7',
+        text: '#9b2c2c',
+        border: '#fbb6ce',
       },
       warning: {
-        bg: '#fefce8',
-        text: '#ca8a04',
-        border: '#fef3c7',
+        50: '#fffbeb',
+        100: '#fef3c7',
+        200: '#fcd34d',
+        500: '#dd6b20',
+        600: '#c05621',
+        700: '#9c4221',
+        bg: '#fffbeb',
+        text: '#9c4221',
+        border: '#fcd34d',
       },
       // Platform colors
       youtube: {

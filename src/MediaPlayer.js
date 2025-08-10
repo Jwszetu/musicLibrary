@@ -5,7 +5,7 @@ import { useQueue } from './hooks/useQueue';
 import { useTheme } from './hooks/useTheme';
 
 
-function VideoModal({ videoUrl, onClose }) {
+function MediaPlayer({ videoUrl, onClose }) {
   // Collapsible right sidebar
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -395,4 +395,4 @@ function VideoModal({ videoUrl, onClose }) {
   );
 }
 
-export default VideoModal;
+export default MediaPlayer;
