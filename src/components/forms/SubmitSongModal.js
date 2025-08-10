@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabaseClient'; // Import supabase client
+import { supabaseCrud } from '../../lib/supabase'; // Import CRUD class
 import { useTheme } from '../../hooks/useTheme';
 
 /**
@@ -38,9 +38,9 @@ function SubmitSongModal({ onClose }) {
   // Fetch available platforms when the component mounts
   useEffect(() => {
     async function fetchPlatforms() {
-      const { data, error } = await supabase.from('platforms').select('id, name, icon_url');
+      const { data, error } = await supabaseCrud.getPlatforms();
       if (error) {
-        console.error('Error fetching platforms:', error.message);
+        console.error('Error fetching platforms:', error);
       } else {
         setPlatforms(data || []);
       }
@@ -97,116 +97,24 @@ function SubmitSongModal({ onClose }) {
     }
 
     try {
-      // 1. Insert the Song
-      const { data: songData, error: songError } = await supabase
-        .from('songs')
-        .insert({
-          title: songTitle,
-          description: songDescription,
-          // submitted_by: 'YOUR_DEFAULT_USER_UUID', // TODO: Replace with a mechanism to get a user ID or remove if not needed
-          // For now, we omit submitted_by since we're not using auth.
-          // If you *do* need it, you must insert a dummy profile linked to auth.users.
-        })
-        .select('id')
-        .single();
+      // Prepare song data for the CRUD class
+      const songData = {
+        title: songTitle,
+        description: songDescription,
+        artists: artistNames.split(',').map(name => name.trim()).filter(name => name.length > 0),
+        tags: tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0),
+        links: links.filter(link => link.url && link.platformId)
+      };
 
-      if (songError) throw songError;
-      const newSongId = songData.id;
+      // Use the CRUD class to create the song with all relationships
+      const { data, error } = await supabaseCrud.createSong(songData);
 
-      // 2. Process Artists
-      const artistNamesArray = artistNames.split(',').map(name => name.trim()).filter(name => name.length > 0);
-      const artistIdsToLink = [];
-
-      for (const name of artistNamesArray) {
-        let artistId;
-        // Try to find existing artist
-        const { data: existingArtist, error: findError } = await supabase
-          .from('artists')
-          .select('id')
-          .eq('name', name)
-          .single();
-
-        if (existingArtist) {
-          artistId = existingArtist.id;
-        } else if (findError && findError.code === 'PGRST116') { // No rows found
-          // Create new artist if not found
-          const { data: newArtist, error: insertArtistError } = await supabase
-            .from('artists')
-            .insert({ name: name })
-            .select('id')
-            .single();
-          if (insertArtistError) throw insertArtistError;
-          artistId = newArtist.id;
-        } else if (findError) {
-          throw findError; // Other error
-        }
-        artistIdsToLink.push(artistId);
-      }
-
-      // Link artists to the song
-      if (artistIdsToLink.length > 0) {
-        const songArtistsData = artistIdsToLink.map(artist_id => ({
-          song_id: newSongId,
-          artist_id: artist_id,
-        }));
-        const { error: songArtistsError } = await supabase.from('song_artists').insert(songArtistsData);
-        if (songArtistsError) throw songArtistsError;
-      }
-
-      // 3. Process Tags
-      const tagsArray = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
-      const tagIdsToLink = [];
-
-      for (const tagName of tagsArray) {
-        let tagId;
-        // Try to find existing tag
-        const { data: existingTag, error: findError } = await supabase
-          .from('tags')
-          .select('id')
-          .eq('name', tagName)
-          .single();
-
-        if (existingTag) {
-          tagId = existingTag.id;
-        } else if (findError && findError.code === 'PGRST116') { // No rows found
-          // Create new tag if not found
-          const { data: newTag, error: insertTagError } = await supabase
-            .from('tags')
-            .insert({ name: tagName })
-            .select('id')
-            .single();
-          if (insertTagError) throw insertTagError;
-          tagId = newTag.id;
-        } else if (findError) {
-          throw findError; // Other error
-        }
-        tagIdsToLink.push(tagId);
-      }
-
-      // Link tags to the song
-      if (tagIdsToLink.length > 0) {
-        const songTagsData = tagIdsToLink.map(tag_id => ({
-          song_id: newSongId,
-          tag_id: tag_id,
-        }));
-        const { error: songTagsError } = await supabase.from('song_tags').insert(songTagsData);
-        if (songTagsError) throw songTagsError;
-      }
-
-      // 4. Insert Song Links
-      const validLinks = links.filter(link => link.url && link.platformId);
-      if (validLinks.length > 0) {
-        const songLinksData = validLinks.map(link => ({
-          song_id: newSongId,
-          platform_id: link.platformId,
-          url: link.url,
-        }));
-        const { error: songLinksError } = await supabase.from('song_links').insert(songLinksData);
-        if (songLinksError) throw songLinksError;
+      if (error) {
+        throw new Error(error);
       }
 
       setSubmissionMessage({ type: 'success', text: 'Song submitted successfully!' });
-      // Optionally clear form fields after successful submission
+      // Clear form fields after successful submission
       setSongTitle('');
       setSongDescription('');
       setArtistNames('');
@@ -214,8 +122,8 @@ function SubmitSongModal({ onClose }) {
       setLinks([{ url: '', platformId: '' }]);
 
     } catch (error) {
-      console.error('Submission error:', error.message);
-      setSubmissionMessage({ type: 'error', text: `Failed to submit song: ${error.message}` });
+      console.error('Submission error:', error.message || error);
+      setSubmissionMessage({ type: 'error', text: `Failed to submit song: ${error.message || error}` });
     } finally {
       setLoading(false);
     }

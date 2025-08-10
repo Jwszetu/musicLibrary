@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabaseClient';
+import { supabaseCrud } from '../lib/supabase';
 
 // Configuration constants
 const DEFAULT_SEARCH_CONFIG = {
@@ -203,7 +203,12 @@ class SearchManager {
 
   // Build Supabase query based on current search state
   buildQuery() {
-    let query = supabase
+    // For basic text-only searches, we could use the CRUD class, but since this
+    // SearchManager supports advanced features like pagination, filtering, etc.,
+    // we'll keep the direct Supabase query for now.
+    // TODO: Consider extending supabaseCrud to support advanced search features
+    
+    let query = supabaseCrud.client
       .from('songs_view')
       .select('id, title, description, created_at, artists, links, tags', { count: 'exact' })
       .order('created_at', { ascending: false });
@@ -313,12 +318,12 @@ class SearchManager {
       try {
         // Fetch a limited sample to derive suggestions quickly
         const [{ data: tagData }, { data: artistData }] = await Promise.all([
-          supabase
+          supabaseCrud.client
             .from('songs_view')
             .select('tags')
             .not('tags', 'is', null)
             .limit(50),
-          supabase
+          supabaseCrud.client
             .from('songs_view')
             .select('artists')
             .not('artists', 'is', null)

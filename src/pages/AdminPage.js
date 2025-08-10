@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { supabase } from "../lib/supabaseClient";
+import { supabaseCrud } from "../lib/supabase";
 import { getColor } from "./themes/getColor";
 
 const AdminPage = () => {
@@ -12,13 +12,17 @@ const AdminPage = () => {
   useEffect(() => {
     const fetchSongs = async () => {
       setLoading(true);
-      let { data, error } = await supabase
-        .from("songs")
-        .select("id, title, created_at");
+      const { data, error } = await supabaseCrud.getSongs();
       if (error) {
         setSongs([]);
       } else {
-        setSongs(data);
+        // Map to get just the fields we need for admin view
+        const simplifiedSongs = (data || []).map(song => ({
+          id: song.id,
+          title: song.title,
+          created_at: song.created_at
+        }));
+        setSongs(simplifiedSongs);
       }
       setLoading(false);
     };
@@ -29,19 +33,14 @@ const AdminPage = () => {
     if (!window.confirm("Are you sure you want to delete this song?")) return;
     setDeleteId(id);
     setDeleteStatus(null);
-    // Delete song_links, song_tags, then song
+    // Delete song and all related data using CRUD class
     try {
-      // Remove song_links
-      await supabase.from("song_links").delete().eq("song_id", id);
-      // Remove song_tags
-      await supabase.from("song_tags").delete().eq("song_id", id);
-      // Remove song
-      const { error } = await supabase.from("songs").delete().eq("id", id);
-      if (error) throw error;
+      const { error } = await supabaseCrud.deleteSong(id);
+      if (error) throw new Error(error);
       setDeleteStatus({ type: "success", message: "Song deleted." });
       setRefresh((r) => !r);
     } catch (err) {
-      setDeleteStatus({ type: "error", message: err.message });
+      setDeleteStatus({ type: "error", message: err.message || err });
     } finally {
       setDeleteId(null);
     }

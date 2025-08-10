@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import { supabaseCrud } from '../lib/supabase';
 import SubmitSongModal from '../components/forms/SubmitSongModal';
 import DisplaySongs from '../features/songs/DisplaySongs';
 import Navbar from '../components/ui/Navbar';
@@ -37,20 +37,13 @@ function HomePage() {
       }
       setError(null);
 
-      let query = supabase
-        .from('songs_view')
-        .select('id, title, description, created_at, artists, links, tags')
-        .order('created_at', { ascending: false });
-
-      // Simple text search
-      if (search && search.trim() !== '') {
-        query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
-      }
-
-      const { data, error } = await query;
+      // Use the new CRUD class
+      const { data, error } = search && search.trim() !== '' 
+        ? await supabaseCrud.searchSongs(search)
+        : await supabaseCrud.getSongs();
 
       if (error) {
-        console.error('Error fetching songs:', error.message);
+        console.error('Error fetching songs:', error);
         setError('Failed to load songs. Please try again later.');
       } else {
         setSongs(data || []);

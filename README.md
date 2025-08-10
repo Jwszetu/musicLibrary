@@ -58,8 +58,10 @@ A modern React application for discovering, organizing, and playing music with a
 ### Backend & Database
 - **Supabase** for backend-as-a-service
 - **PostgreSQL** database with custom views (`songs_view`)
+- **Centralized CRUD Operations**: Clean, reusable database operations class
 - **Real-time subscriptions** for live data updates
 - **Row Level Security** for data protection
+- **Transaction Management**: Atomic operations for complex data relationships
 
 ### State Management
 - **Observable Pattern**: Custom singleton services for global state
@@ -103,7 +105,8 @@ src/
 │   ├── SearchManager.js        # Advanced search service
 │   └── ThemeManager.js         # Observable theme management
 ├── lib/                 # Utilities and configuration
-│   └── supabaseClient.js       # Database configuration
+│   ├── supabaseClient.js       # Database configuration
+│   └── supabaseCrud.js         # Centralized CRUD operations class
 └── themes/              # Theme system
     ├── themes.js               # Theme definitions and colors
     ├── global.css              # Theme-aware CSS utilities
@@ -174,6 +177,41 @@ The build will be optimized and ready for deployment to services like Vercel, Ne
 1. Click the theme switcher in the navigation
 2. Choose from Light, Dark, or Ocean themes
 3. All components adapt automatically
+
+## 🗃️ Database Operations
+
+### Supabase CRUD Class
+The application includes a comprehensive CRUD operations class (`supabaseCrud.js`) that provides:
+
+- **Song Operations**: Create, read, update, delete songs with related data
+- **Search Functionality**: Intelligent search across titles and descriptions
+- **Artist Management**: Automatic artist creation and linking
+- **Tag Management**: Dynamic tag creation and association
+- **Platform Links**: Multi-platform link management
+- **Real-time Subscriptions**: Live data updates across components
+- **Error Handling**: Comprehensive error handling with detailed feedback
+- **Transaction Safety**: Atomic operations for data integrity
+
+```javascript
+// Example usage
+import { supabaseCrud } from '../lib/supabaseCrud';
+
+// Get all songs
+const { data: songs, error } = await supabaseCrud.getSongs();
+
+// Create a new song with relationships
+const songData = {
+  title: "New Song",
+  description: "A great song",
+  artists: ["Artist 1", "Artist 2"],
+  tags: ["rock", "indie"],
+  links: [{ url: "youtube.com/...", platformId: "1" }]
+};
+const { data: newSong } = await supabaseCrud.createSong(songData);
+
+// Search songs
+const { data: results } = await supabaseCrud.searchSongs("search term");
+```
 
 ## 🛠️ Technical Features
 
